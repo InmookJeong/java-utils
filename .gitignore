@@ -5,5 +5,6 @@
 /Utils/.classpath
 /Utils/.project
 
-# 프로젝트의 .settings 폴더와 그 하위 파일 및 폴더가 commit되지 않도록 작성
+# 프로젝트의 .settings 폴더, bin 폴더와 그 하위 파일 및 폴더가 commit되지 않도록 작성
 /Utils/.settings/**
+/Utils/bin/**
