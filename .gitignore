@@ -1,0 +1,9 @@
+# 프로젝트의 .metadata 폴더가 commit되지 않도록 작성
+/.metadata/
+
+# 프로젝트의 .classpath 파일과 .project 파일이 commit되지 않도록 작성
+/Utils/.classpath
+/Utils/.project
+
+# 프로젝트의 .settings 폴더와 그 하위 파일 및 폴더가 commit되지 않도록 작성
+/Utils/.settings/**
