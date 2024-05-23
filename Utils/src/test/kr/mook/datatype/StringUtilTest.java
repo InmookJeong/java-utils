@@ -1,6 +1,5 @@
 package kr.mook.datatype;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +25,7 @@ class StringUtilTest {
 		"홍길동, false"
 	})
 	void isEmpty(String data, boolean expected) {
-		if(data == null || data.isEmpty()) assertTrue(expected);
-		else assertFalse(expected);
+		assertTrue(StringUtil.isEmpty(data) == expected);
 	}
 	
 	@DisplayName(value = "문자열의 값이 Null이 아니고 빈 값이 아닌지 확인")
@@ -40,8 +38,7 @@ class StringUtilTest {
 		"홍길동, true"
 	})
 	void isNotEmpty(String data, boolean expected) {
-		if(data == null || data.isEmpty()) assertFalse(expected);
-		else assertTrue(expected);
+		assertTrue(StringUtil.isNotEmpty(data) == expected);
 	}
 
 }
