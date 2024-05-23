@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -52,10 +51,7 @@ class StringUtilTest {
 		"홍길동, 홍길동"
 	})
 	void nullToString(String data, String expected) {
-		String result = null;
-		if(data == null) result = "";
-		else result = data;
-		assertEquals(result, expected);
+		assertEquals(StringUtil.nullToString(data), expected);
 	}
 
 }

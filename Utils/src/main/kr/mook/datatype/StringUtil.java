@@ -33,4 +33,14 @@ public class StringUtil {
 		return true;
 	}
 	
+	/**
+	 * This method checks if the string is null and returns an empty value if the string is null, otherwise it returns the passed value.
+	 * 
+	 * @param value
+	 * @return empty string or parameter value
+	 */
+	public static String nullToString(final String value) {
+		if(value == null) return "";
+		return value;
+	}
 }
