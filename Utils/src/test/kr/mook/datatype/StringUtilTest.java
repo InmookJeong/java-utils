@@ -1,8 +1,10 @@
 package kr.mook.datatype;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -39,6 +41,21 @@ class StringUtilTest {
 	})
 	void isNotEmpty(String data, boolean expected) {
 		assertTrue(StringUtil.isNotEmpty(data) == expected);
+	}
+	
+	@DisplayName(value = "문자열의 값이 Null이면 빈 값을 반환하고 Null이 아니면 전달받은 값을 반환하는지 확인")
+	@ParameterizedTest
+	@CsvSource({
+		", ''",
+		"'', ''",
+		"abc, abc",
+		"홍길동, 홍길동"
+	})
+	void nullToString(String data, String expected) {
+		String result = null;
+		if(data == null) result = "";
+		else result = data;
+		assertEquals(result, expected);
 	}
 
 }
