@@ -3,7 +3,6 @@ package kr.mook.crypto;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.logging.Logger;
@@ -16,57 +15,30 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * EncryptUtil
+ * DecryptUtil
  * 
- * @since 2024.06.10
+ * @since 2024.06.11
  * @author In-mook, Jeong
  * @version 1.0.0
  */
-public class EncryptUtil {
+public class DecryptUtil {
 	
-	private static final Logger log = Logger.getLogger(EncryptUtil.class.getName());
+	private static final Logger log = Logger.getLogger(DecryptUtil.class.getName());
 	
-	private static final String SHA_256_INSTANCE = "SHA-256";
 	private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
 	private static final String AES_KEY_SPEC = "AES";
 	private static final String AES_KEY = "test1234test1234test1234";
 	
 	/**
-	 * Converts plain text into cipher text using SHA256 encryption.
+	 * Converts cipher text into plain text using AES decryption.
 	 * 
 	 * @param plainText
-	 * @return Returns a string encrypted with SHA256.
+	 * @return Returns a string decrypted with AES.
 	 */
-	public static String toSHA256(final String plainText) {
-		String encryptText = "";
-		try {
-			MessageDigest md = MessageDigest.getInstance(SHA_256_INSTANCE);
-			md.update(plainText.getBytes());
-			byte[] encryptTextBytes = md.digest();
-			StringBuffer sb = new StringBuffer();
-			for(byte b : encryptTextBytes) {
-				sb.append(String.format("%02x", b));
-			}
-			
-			encryptText = sb.toString();
-		} catch (NoSuchAlgorithmException e) {
-			log.severe("Error occurred to creation MessageDigest because SHA256 algorithm no such.");
-			e.printStackTrace();
-		}
+	public static String fromAES(final String cipherText) {
+		if(cipherText == null) return null;
 		
-		return encryptText;
-	}
-	
-	/**
-	 * Converts plain text into cipher text using AES encryption.
-	 * 
-	 * @param plainText
-	 * @return Returns a string encrypted with AES.
-	 */
-	public static String toAES(final String plainText) {
-		if(plainText == null) return null;
-		
-		String cipherText = "";
+		String plainText = "";
 		try {
 			// AES Secret key
 			SecretKeySpec secretKey = new SecretKeySpec(AES_KEY.getBytes("UTF-8"), AES_KEY_SPEC);
@@ -75,10 +47,10 @@ public class EncryptUtil {
 			// AES instance
 			Cipher cipher = Cipher.getInstance(AES_CIPHER_ALGORITHM);
 			// Init
-			cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
-			// Create cipher text
-			byte[] cipherTextBytes = cipher.doFinal(plainText.getBytes("UTF-8"));
-			cipherText = Base64.getEncoder().encodeToString(cipherTextBytes);
+			cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
+			// Create plain text
+			byte[] plainTextBytes = cipher.doFinal(Base64.getDecoder().decode(cipherText));
+			plainText = new String(plainTextBytes, "UTF-8");
 		} catch (NoSuchAlgorithmException e) {
 			log.severe("Error occurred to creation cipher instance because AES algorithm no such.");
 			e.printStackTrace();
@@ -102,6 +74,6 @@ public class EncryptUtil {
 			e.printStackTrace();
 		}
 		
-		return cipherText;
+		return plainText;
 	}
 }

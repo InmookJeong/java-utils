@@ -21,5 +21,4 @@ class EncryptUtilTest {
 		String expected = "937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244";
 		assertEquals(EncryptUtil.toSHA256(actual), expected);
 	}
-
 }
