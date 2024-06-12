@@ -14,6 +14,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import kr.mook.enums.CryptoEnum;
+
 /**
  * DecryptUtil
  * 
@@ -23,34 +25,33 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class DecryptUtil {
 	
+	// Logger
 	private static final Logger log = Logger.getLogger(DecryptUtil.class.getName());
-	
-	private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
-	private static final String AES_KEY_SPEC = "AES";
-	private static final String AES_KEY = "test1234test1234test1234";
 	
 	/**
 	 * Converts cipher text into plain text using AES decryption.
 	 * 
 	 * @param plainText
+	 * @param secretKey : This is the key for AES encryption. The encryption key is 32 characters long.
+	 * @param iv : This is the initialization vector(IV). The IV is 16 characters long.
 	 * @return Returns a string decrypted with AES.
 	 */
-	public static String fromAES(final String cipherText) {
+	public static String fromAES(final String cipherText, final String secretKey, final String iv) {
 		if(cipherText == null) return null;
 		
 		String plainText = "";
 		try {
 			// AES Secret key
-			SecretKeySpec secretKey = new SecretKeySpec(AES_KEY.getBytes("UTF-8"), AES_KEY_SPEC);
-			IvParameterSpec ivParameterSpec = new IvParameterSpec(new byte[16]);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes("UTF-8"), CryptoEnum.AES.getSpec());
+			IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes());
 			
 			// AES instance
-			Cipher cipher = Cipher.getInstance(AES_CIPHER_ALGORITHM);
+			Cipher cipher = Cipher.getInstance(CryptoEnum.AES.getAlgorithm());
 			// Init
-			cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
+			cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
 			// Create plain text
-			byte[] plainTextBytes = cipher.doFinal(Base64.getDecoder().decode(cipherText));
-			plainText = new String(plainTextBytes, "UTF-8");
+			byte[] plainTextBytes = cipher.doFinal(Base64.getDecoder().decode(cipherText.getBytes("UTF-8")));
+			plainText = new String(plainTextBytes);
 		} catch (NoSuchAlgorithmException e) {
 			log.severe("Error occurred to creation cipher instance because AES algorithm no such.");
 			e.printStackTrace();

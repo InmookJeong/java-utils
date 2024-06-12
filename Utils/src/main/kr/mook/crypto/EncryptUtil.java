@@ -15,6 +15,9 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import kr.mook.enums.CryptoEnum;
+import kr.mook.enums.HashEnum;
+
 /**
  * EncryptUtil
  * 
@@ -24,12 +27,8 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class EncryptUtil {
 	
+	// Logger
 	private static final Logger log = Logger.getLogger(EncryptUtil.class.getName());
-	
-	private static final String SHA_256_INSTANCE = "SHA-256";
-	private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
-	private static final String AES_KEY_SPEC = "AES";
-	private static final String AES_KEY = "test1234test1234test1234";
 	
 	/**
 	 * Converts plain text into cipher text using SHA256 encryption.
@@ -40,7 +39,7 @@ public class EncryptUtil {
 	public static String toSHA256(final String plainText) {
 		String encryptText = "";
 		try {
-			MessageDigest md = MessageDigest.getInstance(SHA_256_INSTANCE);
+			MessageDigest md = MessageDigest.getInstance(HashEnum.SHA256.getSepc());
 			md.update(plainText.getBytes());
 			byte[] encryptTextBytes = md.digest();
 			StringBuffer sb = new StringBuffer();
@@ -61,24 +60,26 @@ public class EncryptUtil {
 	 * Converts plain text into cipher text using AES encryption.
 	 * 
 	 * @param plainText
+	 * @param secretKey : This is the key for AES encryption. The encryption key is 32 characters long.
+	 * @param iv : This is the initialization vector(IV). The IV is 16 characters long.
 	 * @return Returns a string encrypted with AES.
 	 */
-	public static String toAES(final String plainText) {
+	public static String toAES(final String plainText, final String secretKey, final String iv) {
 		if(plainText == null) return null;
 		
 		String cipherText = "";
 		try {
 			// AES Secret key
-			SecretKeySpec secretKey = new SecretKeySpec(AES_KEY.getBytes("UTF-8"), AES_KEY_SPEC);
-			IvParameterSpec ivParameterSpec = new IvParameterSpec(new byte[16]);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes("UTF-8"), CryptoEnum.AES.getSpec());
+			IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes());
 			
 			// AES instance
-			Cipher cipher = Cipher.getInstance(AES_CIPHER_ALGORITHM);
+			Cipher cipher = Cipher.getInstance(CryptoEnum.AES.getAlgorithm());
 			// Init
-			cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
+			cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
 			// Create cipher text
 			byte[] cipherTextBytes = cipher.doFinal(plainText.getBytes("UTF-8"));
-			cipherText = Base64.getEncoder().encodeToString(cipherTextBytes);
+			cipherText = new String(Base64.getEncoder().encode(cipherTextBytes));
 		} catch (NoSuchAlgorithmException e) {
 			log.severe("Error occurred to creation cipher instance because AES algorithm no such.");
 			e.printStackTrace();
