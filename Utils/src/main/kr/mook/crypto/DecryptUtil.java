@@ -1,6 +1,5 @@
 package kr.mook.crypto;
 
-import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -40,9 +39,10 @@ public class DecryptUtil {
 		if(cipherText == null) return null;
 		
 		String plainText = "";
+		byte[] plainTextBytes = Base64.getDecoder().decode(cipherText);
 		try {
 			// AES Secret key
-			SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes("UTF-8"), CryptoEnum.AES.getSpec());
+			SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), CryptoEnum.AES.getSpec());
 			IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes());
 			
 			// AES instance
@@ -50,8 +50,7 @@ public class DecryptUtil {
 			// Init
 			cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
 			// Create plain text
-			byte[] plainTextBytes = cipher.doFinal(Base64.getDecoder().decode(cipherText.getBytes("UTF-8")));
-			plainText = new String(plainTextBytes);
+			plainText = new String(cipher.doFinal(plainTextBytes));
 		} catch (NoSuchAlgorithmException e) {
 			log.severe("Error occurred to creation cipher instance because AES algorithm no such.");
 			e.printStackTrace();
@@ -69,9 +68,6 @@ public class DecryptUtil {
 			e.printStackTrace();
 		} catch (BadPaddingException e) {
 			log.severe("Error occurred to making AES cipher text because bad padding.");
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			log.severe("Error occurred to making AES cipher text because unsupported encoding.");
 			e.printStackTrace();
 		}
 		
