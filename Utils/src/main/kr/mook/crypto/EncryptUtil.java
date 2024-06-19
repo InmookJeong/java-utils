@@ -70,7 +70,7 @@ public class EncryptUtil {
 		String cipherText = "";
 		try {
 			// AES Secret key
-			SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes("UTF-8"), CryptoEnum.AES.getSpec());
+			SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), CryptoEnum.AES.getSpec());
 			IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes());
 			
 			// AES instance
