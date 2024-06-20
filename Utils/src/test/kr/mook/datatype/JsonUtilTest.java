@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -19,8 +20,9 @@ import com.fasterxml.jackson.core.JsonParseException;
  */
 class JsonUtilTest {
 	
+	@DisplayName("JSON 형식의 문자열을 HashMap으로 변경하기 위한 테스트 기능")
 	@Test
-	void stringToMap(){
+	void stringToHashMap(){
 		HashMap<String, Object> jsonMap = null;
 		
 		try {
