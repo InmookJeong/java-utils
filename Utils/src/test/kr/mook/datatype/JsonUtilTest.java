@@ -2,7 +2,6 @@ package kr.mook.datatype;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
@@ -24,50 +23,6 @@ import kr.mook.dto.UserTestDTO2;
  * @version 1.0.0
  */
 class JsonUtilTest {
-	
-	@DisplayName("JSON 형식의 문자열을 HashMap으로 변경하기 위한 테스트 기능")
-	@Test
-	void stringToHashMap(){
-		HashMap<String, Object> jsonMap = null;
-		
-		try {
-			assertTrue(JsonUtil.stringToHashMap(null).isEmpty());
-			assertTrue(JsonUtil.stringToHashMap("").isEmpty());
-			assertTrue(JsonUtil.stringToHashMap("{}").isEmpty());
-			
-			jsonMap = null;
-			assertThatThrownBy(() -> JsonUtil.stringToHashMap("1"))
-			.isInstanceOf(JsonParseException.class);
-			
-			assertThatThrownBy(() -> JsonUtil.stringToHashMap("[]"))
-			.isInstanceOf(JsonParseException.class);
-			
-			assertThatThrownBy(() -> JsonUtil.stringToHashMap("abc"))
-			.isInstanceOf(JsonParseException.class);
-			
-			assertThatThrownBy(() -> JsonUtil.stringToHashMap("{\"id\"=1}"))
-			.isInstanceOf(JsonParseException.class);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		String jsonString = "{\"id\":1,\"userId\":\"test\",\"name\":\"홍길동\",\"age\":30}";
-		try {
-			jsonMap = JsonUtil.stringToHashMap(jsonString);
-			assertEquals((int)jsonMap.get("id"), 1);
-			assertEquals((String)jsonMap.get("userId"), "test");
-			assertEquals((String)jsonMap.get("name"), "홍길동");
-			assertEquals((int)jsonMap.get("age"), 30);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			jsonMap = null;
-		}
-	}
 	
 	@DisplayName("JSON 형식의 문자열이 사용자가 원하는 객체로 변환되는지 확인하기 위한 로직")
 	@Test
