@@ -69,4 +69,41 @@ class JsonUtilTest {
 			e.printStackTrace();
 		}
 	}
+	
+	@DisplayName("JSON 형식의 문자열이 사용자가 원하는 객체로 변환되는지 확인하기 위한 로직")
+	@Test
+	void stringToArray() {
+		String jsonString = "[{\"id\":1,\"userId\":\"test\",\"name\":\"홍길동\",\"age\":30}, {\"id\":2, \"userId\":\"test2\", \"name\":\"홍이동\", \"age\":24}]";
+		try {
+			assertThatThrownBy(() -> JsonUtil.stringToArray(null))
+			.isInstanceOf(JsonParseException.class);
+			
+			assertThatThrownBy(() -> JsonUtil.stringToArray(""))
+			.isInstanceOf(JsonParseException.class);
+			
+			assertThatThrownBy(() -> JsonUtil.stringToArray("1"))
+			.isInstanceOf(JsonParseException.class);
+			
+			assertThatThrownBy(() -> JsonUtil.stringToArray("{}"))
+			.isInstanceOf(JsonParseException.class);
+			
+			assertThatThrownBy(() -> JsonUtil.stringToArray("abc"))
+			.isInstanceOf(JsonParseException.class);
+			
+			assertThatThrownBy(() -> JsonUtil.stringToArray("{\"id\"=1}"))
+			.isInstanceOf(JsonParseException.class);
+			
+			assertEquals(JsonUtil.stringToArray("[]").size(), 0);
+			
+			List<UserTestDTO> UserTestList = JsonUtil.stringToArray(jsonString);
+			assertEquals(UserTestList.size(), 2);
+			assertEquals(UserTestList.get(0).getClass().getName(), UserTestDTO.class.getName());
+			assertEquals(UserTestList.get(0).getAge(), 30);
+			assertEquals(UserTestList.get(1).getName(), "홍이동");
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
