@@ -73,33 +73,33 @@ class JsonUtilTest {
 	@DisplayName("JSON 형식의 문자열이 사용자가 원하는 객체로 변환되는지 확인하기 위한 로직")
 	@Test
 	void stringToArray() {
-		String jsonString = "[{\"id\":1,\"userId\":\"test\",\"name\":\"홍길동\",\"age\":30}, {\"id\":2, \"userId\":\"test2\", \"name\":\"홍이동\", \"age\":24}]";
+		String jsonString = "[{\"id\":1,\"userId\":\"test\",\"age\":30}, {\"id\":2, \"userId\":\"test2\", \"name\":\"홍이동\", \"age\":24}]";
 		try {
-			assertThatThrownBy(() -> JsonUtil.stringToArray(null))
+			assertThatThrownBy(() -> JsonUtil.stringToArray(null, Object.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray(""))
+			assertThatThrownBy(() -> JsonUtil.stringToArray("", String.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray("1"))
+			assertThatThrownBy(() -> JsonUtil.stringToArray("1", Integer.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray("{}"))
+			assertThatThrownBy(() -> JsonUtil.stringToArray("{}", Object.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray("abc"))
+			assertThatThrownBy(() -> JsonUtil.stringToArray("abc", String.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray("{\"id\"=1}"))
+			assertThatThrownBy(() -> JsonUtil.stringToArray("{\"id\"=1}", HashMap.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertEquals(JsonUtil.stringToArray("[]").size(), 0);
+			assertEquals(JsonUtil.stringToArray("[]", List.class).size(), 0);
 			
-			List<UserTestDTO> UserTestList = JsonUtil.stringToArray(jsonString);
-			assertEquals(UserTestList.size(), 2);
-			assertEquals(UserTestList.get(0).getClass().getName(), UserTestDTO.class.getName());
-			assertEquals(UserTestList.get(0).getAge(), 30);
-			assertEquals(UserTestList.get(1).getName(), "홍이동");
+			List<UserTestDTO> userTestList = JsonUtil.stringToArray(jsonString, UserTestDTO.class);
+			assertEquals(userTestList.size(), 2);
+			assertEquals(userTestList.get(0).getClass().getName(), UserTestDTO.class.getName());
+			assertEquals(userTestList.get(0).getAge(), 30);
+			assertEquals(userTestList.get(1).getName(), "홍이동");
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (Exception e) {

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
  * JsonUtil
@@ -81,7 +82,7 @@ public class JsonUtil {
 	 * @Exmaple
 	 * List<CustomDTO> customDtoList = (List<CustomDTO>) JsonUtil.stringToArray("[{'userId':'userTest', 'name':'James'}]");
 	 */
-	public static List stringToArray(final String jsonString) throws JsonParseException, Exception {
+	public static List stringToArray(final String jsonString, Class clz) throws JsonParseException, Exception {
 		List list = new ArrayList();
 		
 		if(jsonString == null || jsonString.isEmpty()) {
@@ -94,8 +95,8 @@ public class JsonUtil {
 		
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			
-			list = objectMapper.readValue(jsonString, List.class);
+			TypeFactory typeFactory = objectMapper.getTypeFactory(); 
+			list = objectMapper.readValue(jsonString, typeFactory.constructCollectionType(List.class, clz));
 		} catch (UnrecognizedPropertyException e) {
 			throw new JsonParseException("There is an unrecognized field. Check your input and return type object filed. Your input is \"" + jsonString + "\".");
 		} catch (MismatchedInputException e) {
