@@ -69,21 +69,21 @@ public class JsonUtil {
 	}
 	
 	/**
-	 * Method that converts a JSON format string into an array desired by the user.<br/>
+	 * Method that converts a JSON format string into an array list desired by the user.<br/>
 	 * If the entered value is not in JSON format, an exception is raised.<br/>
 	 * And it only converts based on the JSON-Array format string.<br/>
 	 * It does not return a JSON object.<br/>
 	 * The returned array must be type converted before use.<br/>
 	 * 
 	 * @param jsonString JSON format string
-	 * @return Json Array
+	 * @return Json ArrayList
 	 * @throws JsonParseException
 	 * @throws Exception
 	 * @Exmaple
 	 * List<CustomDTO> customDtoList = (List<CustomDTO>) JsonUtil.stringToArray("[{'userId':'userTest', 'name':'James'}]");
 	 */
-	public static List stringToArray(final String jsonString, Class clz) throws JsonParseException, Exception {
-		List list = new ArrayList();
+	public static <T> List<T> stringToList(final String jsonString, Class<T> clz) throws JsonParseException, Exception {
+		List<T> list = new ArrayList<T>();
 		
 		if(jsonString == null || jsonString.isEmpty()) {
 			throw new JsonParseException("Your input is null or empty string. Cannot be converted to object.");

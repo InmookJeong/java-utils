@@ -75,27 +75,27 @@ class JsonUtilTest {
 	void stringToArray() {
 		String jsonString = "[{\"id\":1,\"userId\":\"test\",\"age\":30}, {\"id\":2, \"userId\":\"test2\", \"name\":\"홍이동\", \"age\":24}]";
 		try {
-			assertThatThrownBy(() -> JsonUtil.stringToArray(null, Object.class))
+			assertThatThrownBy(() -> JsonUtil.stringToList(null, Object.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray("", String.class))
+			assertThatThrownBy(() -> JsonUtil.stringToList("", String.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray("1", Integer.class))
+			assertThatThrownBy(() -> JsonUtil.stringToList("1", Integer.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray("{}", Object.class))
+			assertThatThrownBy(() -> JsonUtil.stringToList("{}", Object.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray("abc", String.class))
+			assertThatThrownBy(() -> JsonUtil.stringToList("abc", String.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertThatThrownBy(() -> JsonUtil.stringToArray("{\"id\"=1}", HashMap.class))
+			assertThatThrownBy(() -> JsonUtil.stringToList("{\"id\"=1}", HashMap.class))
 			.isInstanceOf(JsonParseException.class);
 			
-			assertEquals(JsonUtil.stringToArray("[]", List.class).size(), 0);
+			assertEquals(JsonUtil.stringToList("[]", List.class).size(), 0);
 			
-			List<UserTestDTO> userTestList = JsonUtil.stringToArray(jsonString, UserTestDTO.class);
+			List<UserTestDTO> userTestList = JsonUtil.stringToList(jsonString, UserTestDTO.class);
 			assertEquals(userTestList.size(), 2);
 			assertEquals(userTestList.get(0).getClass().getName(), UserTestDTO.class.getName());
 			assertEquals(userTestList.get(0).getAge(), 30);
